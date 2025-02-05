@@ -18,7 +18,8 @@ target/
 *.iws
 *.iml
 *.ipr
-src/main/resources/application.properties
+db_crd.env
+src/main/resources/application-local.properties
 
 ### NetBeans ###
 /nbproject/private/
