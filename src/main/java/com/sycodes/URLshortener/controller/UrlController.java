@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import java.io.IOException;
 
 @RestController
-@RequestMapping("/api/url")
+@RequestMapping("/")
 public class UrlController {
 
     private final UrlService urlService;
@@ -18,7 +18,7 @@ public class UrlController {
         this.urlService = urlService;
     }
 
-    @PostMapping("/shorten")
+    @PostMapping("shorten")
     public ResponseEntity<String> shortenUrl(@RequestParam String originalUrl,
                                              @RequestParam(required = false) String customShortCode) {
         try {
@@ -29,7 +29,7 @@ public class UrlController {
         }
     }
 
-    @GetMapping("/{shortCode}")
+    @GetMapping("{shortCode}")
     public ResponseEntity<Void> redirectToOriginalUrl(@PathVariable String shortCode, HttpServletResponse response) throws IOException {
         String shortUrl = "https://short.ly/" + shortCode;
         String originalUrl = urlService.getOriginalUrl(shortUrl);
