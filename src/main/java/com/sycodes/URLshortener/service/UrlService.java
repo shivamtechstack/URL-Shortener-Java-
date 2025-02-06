@@ -16,13 +16,23 @@ public class UrlService {
         this.urlRepository = urlRepository;
     }
 
-    public String shortenUrl(String originalUrl) {
+    public String shortenUrl(String originalUrl, String customShortCode) {
         Optional<Url> existingUrl = urlRepository.findByOriginalUrl(originalUrl);
         if (existingUrl.isPresent()) {
             return  existingUrl.get().getShortUrl();
         }
 
-        String shortCode = generatedShortCode();
+        String shortCode;
+        if(customShortCode!=null && !customShortCode.isEmpty()) {
+            if (urlRepository.findByShortUrl(customShortCode).isPresent()) {
+                throw new RuntimeException("custom short URl is already taken.");
+            }
+            shortCode = customShortCode;
+
+        }else {
+            shortCode = generatedShortCode();
+        }
+
         String shortUrl = BASE_URL + shortCode;
         Url url = new Url(originalUrl, shortUrl);
         urlRepository.save(url);

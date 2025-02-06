@@ -1,8 +1,12 @@
 package com.sycodes.URLshortener.controller;
 
 import com.sycodes.URLshortener.service.UrlService;
+import jakarta.servlet.http.HttpServletResponse;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.io.IOException;
 
 @RestController
 @RequestMapping("/api/url")
@@ -15,16 +19,26 @@ public class UrlController {
     }
 
     @PostMapping("/shorten")
-    public ResponseEntity<String> shortenUrl(@RequestParam String originalUrl) {
-        String shortUrl = urlService.shortenUrl(originalUrl);
-        return ResponseEntity.ok(shortUrl);
+    public ResponseEntity<String> shortenUrl(@RequestParam String originalUrl,
+                                             @RequestParam(required = false) String customShortCode) {
+        try {
+            String shortUrl = urlService.shortenUrl(originalUrl, customShortCode);
+            return ResponseEntity.ok(shortUrl);
+        } catch (RuntimeException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
 
     @GetMapping("/{shortCode}")
-    public  ResponseEntity<String> getOriginalUrl(@PathVariable String shortCode){
+    public ResponseEntity<Void> redirectToOriginalUrl(@PathVariable String shortCode, HttpServletResponse response) throws IOException {
         String shortUrl = "https://short.ly/" + shortCode;
         String originalUrl = urlService.getOriginalUrl(shortUrl);
 
-        return originalUrl != null ? ResponseEntity.ok(originalUrl) : ResponseEntity.notFound().build();
+        if (originalUrl != null) {
+            response.sendRedirect(originalUrl);
+            return ResponseEntity.status(HttpStatus.FOUND).build();
+        } else {
+            return ResponseEntity.notFound().build();
+        }
     }
 }
