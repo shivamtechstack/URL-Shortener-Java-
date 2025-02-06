@@ -1,5 +1,8 @@
-# Use the Maven image to build the app
-FROM maven:3.8.7-openjdk-23 AS build
+# Use OpenJDK 17 to build the app
+FROM openjdk:17-jdk AS build
+
+# Install Maven
+RUN apt-get update && apt-get install -y maven
 
 # Set the working directory
 WORKDIR /app
@@ -11,8 +14,8 @@ COPY src ./src
 # Build the project and package the application
 RUN mvn clean package -DskipTests
 
-# Use the official OpenJDK 23 image to run the app
-FROM openjdk:23-jdk
+# Use OpenJDK 17 to run the app
+FROM openjdk:17-jdk
 
 # Copy the JAR file from the build stage to the final image
 COPY --from=build /app/target/URLshortener-0.0.1-SNAPSHOT.jar /URLshortener.jar
