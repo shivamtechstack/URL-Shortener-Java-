@@ -1,8 +1,5 @@
-# Use OpenJDK 17 to build the app
-FROM openjdk:17-jdk AS build
-
-# Install Maven
-RUN apt-get update && apt-get install -y maven
+# Use Maven and OpenJDK 17 image as base image
+FROM maven:3.8.7-openjdk-17 AS build
 
 # Set the working directory
 WORKDIR /app
@@ -25,3 +22,4 @@ EXPOSE 8080
 
 # Run the app using the specified JAR
 ENTRYPOINT ["java", "-jar", "/URLshortener.jar"]
+
