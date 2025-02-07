@@ -31,7 +31,7 @@ public class UrlController {
 
     @GetMapping("{shortCode}")
     public ResponseEntity<Void> redirectToOriginalUrl(@PathVariable String shortCode, HttpServletResponse response) throws IOException {
-        String shortUrl = "https://short.ly/" + shortCode;
+        String shortUrl = "https://ushort-ldis.onrender.com/" + shortCode;
         String originalUrl = urlService.getOriginalUrl(shortUrl);
 
         if (originalUrl != null) {
