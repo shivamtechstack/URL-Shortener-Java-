@@ -7,7 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
-
+@CrossOrigin(origins = "*")
 @RestController
 @RequestMapping("/")
 public class UrlController {
@@ -33,7 +33,6 @@ public class UrlController {
     public ResponseEntity<Void> redirectToOriginalUrl(@PathVariable String shortCode, HttpServletResponse response) throws IOException {
         String shortUrl = "https://ushort-ldis.onrender.com/" + shortCode;
         String originalUrl = urlService.getOriginalUrl(shortUrl);
-
         if (originalUrl != null) {
             response.sendRedirect(originalUrl);
             return ResponseEntity.status(HttpStatus.FOUND).build();
