@@ -10,7 +10,7 @@ import java.util.Random;
 @Service
 public class UrlService {
     private final UrlRepository urlRepository;
-    private static final String BASE_URL = "https://ushort-ldis.onrender.com/";
+    private static final String BASE_URL = "https://localhost8080/";
 
     public UrlService(UrlRepository urlRepository) {
         this.urlRepository = urlRepository;
